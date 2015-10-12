@@ -28,26 +28,37 @@ def dict2json(vardict):
   fp.write(jsondata)
   fp.close()
 
+#Get hk1 server info to dict_hk1
+dict_hk1 = {}
+dict_hk1['server'] = os.popen('cat ss.htm|sed -n \'213p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk1['server_port'] = os.popen('cat ss.htm|sed -n \'214p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk1['local_address'] = get_ip_address('wlan0')
+dict_hk1['local_port'] = '1080'
+dict_hk1['password'] = os.popen('cat ss.htm|sed -n \'215p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk1['timeout'] = '300'
+dict_hk1['method'] = os.popen('cat ss.htm|sed -n \'216p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk1['fast_open'] = 'false'
+
 #Get hk2 server info to dict_hk2
 dict_hk2 = {}
-dict_hk2['server'] = os.popen('cat ss.htm|sed -n \'219p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
-dict_hk2['server_port'] = os.popen('cat ss.htm|sed -n \'220p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk2['server'] = os.popen('cat ss.htm|sed -n \'221p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk2['server_port'] = os.popen('cat ss.htm|sed -n \'222p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
 dict_hk2['local_address'] = get_ip_address('wlan0')
 dict_hk2['local_port'] = '1080'
-dict_hk2['password'] = os.popen('cat ss.htm|sed -n \'221p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk2['password'] = os.popen('cat ss.htm|sed -n \'223p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
 dict_hk2['timeout'] = '300' 
-dict_hk2['method'] = os.popen('cat ss.htm|sed -n \'222p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk2['method'] = os.popen('cat ss.htm|sed -n \'224p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
 dict_hk2['fast_open'] = 'false'
 
 #Get hk3 server info to dict_hk3
 dict_hk3 = {}
-dict_hk3['server'] = os.popen('cat ss.htm|sed -n \'227p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
-dict_hk3['server_port'] = os.popen('cat ss.htm|sed -n \'228p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk3['server'] = os.popen('cat ss.htm|sed -n \'229p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk3['server_port'] = os.popen('cat ss.htm|sed -n \'230p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
 dict_hk3['local_address'] = get_ip_address('wlan0')
 dict_hk3['local_port'] = '1080'
-dict_hk3['password'] = os.popen('cat ss.htm|sed -n \'229p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk3['password'] = os.popen('cat ss.htm|sed -n \'231p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
 dict_hk3['timeout'] = '300'
-dict_hk3['method'] = os.popen('cat ss.htm|sed -n \'230p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
+dict_hk3['method'] = os.popen('cat ss.htm|sed -n \'232p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n')
 dict_hk3['fast_open'] = 'false'
 
 status_hk2 = os.popen('cat ss.htm|sed -n \'225p\'|awk -F: \'{print $2}\'|awk -F\\" \'{print $2}\'').read().strip('\n')
@@ -55,10 +66,12 @@ status_hk3 = os.popen('cat ss.htm|sed -n \'233p\'|awk -F: \'{print $2}\'|awk -F\
 
 print (os.popen('cat ss.htm|sed -n \'231p\'|awk -F: \'{print $2}\'|awk -F\< \'{print $1}\'').read().strip('\n'))
 
-if status_hk2 == 'green':
+if (status_hk2 == 'green' and dict_hk2['password']):
   dict2json(dict_hk2)
-else:
+elif (status_hk3 == 'green' and dict_hk3['password']):
   dict2json(dict_hk3)
+else:
+  dict2json(dict_hk1)
 
 #os.remove("ss.htm")
 
